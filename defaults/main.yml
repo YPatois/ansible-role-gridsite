@@ -1,0 +1,44 @@
+---
+# Main variables
+gridsite_name: 'IPHC'
+gridsite_tld_suffix: 'in2p3.fr'
+gridsite_wn_prefix: 'sbgwn'
+
+# VOMS
+gridsite_grid_security_dir: '/etc/grid-security'
+gridsite_vomsdir_dir: '{{ gridsite_grid_security_dir }}/vomsdir'
+gridsite_gridmapdir_dir: '{{ gridsite_grid_security_dir }}/gridmapdir'
+gridsite_vomses_dir: '/etc/grid-security/vomses'
+
+# COMPUTE
+gridsite_vo_pool_accounts_count: 10
+gridsite_role_pool_accounts_count: 2
+
+gridsite_job_time_max: 3-00:00:00
+gridsite_job_time_default: 2-00:00:00
+
+# For ARC_CE
+# This is the shared session dir from the arc_ce itself.
+gridsite_arc_frontend_session_dir: '/shared/arc/sessiondir1'
+# External session dirs.
+gridsite_arc_other_session_dirs: []
+
+
+# ############################### Deduced #####################################
+# Useful
+gridsite_name_lower: '{{ gridsite_name | lower }}'
+gridsite_list_of_wns: "{{ groups['grid_wn'] }}"
+
+# munge role
+munge_key_password: '{{ gridsite_munge_key_password }}'
+
+# arc_ce and wn roles:
+arc_frontend_sessiondir: '{{ gridsite_arc_frontend_session_dir }}'
+
+# ansible-role-voms-accounts
+voms_grid_security_dir: '{{ gridsite_grid_security_dir }}'
+voms_vomsdir_dir: '{{ gridsite_vomsdir_dir }}'
+voms_gridmapdir_dir: '{{ gridsite_gridmapdir_dir }}'
+voms_vomses_dir: '{{ gridsite_vomses_dir }}'
+
+

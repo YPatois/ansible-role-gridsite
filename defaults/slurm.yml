@@ -1,0 +1,9 @@
+---
+# slurm role
+slurm_sitename: '{{ gridsite_name_lower }}'
+slurm_cluster_name: '{{ gridsite_name_lower }}_cluster'
+slurm_compute_nodes: '{{ gridsite_wn_prefix }}*'
+slurm_mysql_password: '{{ gridsite_slurm_mysql_password }}'
+
+slurm_max_job_time: '{{ gridsite_job_time_max }}'
+slurm_job_def_time: '{{ gridsite_job_time_default }}'

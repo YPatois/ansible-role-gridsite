@@ -1,0 +1,90 @@
+---
+# Called from tasks/grid_vo_groups.yml
+# First copy _voms_mapping to _voms_mapping_new
+- name: Copy _voms_mapping to _voms_mapping_new
+  set_fact:
+    _voms_mapping_new: "{{ _voms_mapping }}"
+
+# Add role group
+- name: Role group, but for SW manager and pilot
+  set_fact:
+    _voms_mapping_new: "{{ _voms_mapping_new | combine( {
+    'group': _vo_data.account_prefix+_voms_mapping_new.suffix,
+    'gid': _vo_data.base_uid + _vo_data.voms_mappings.index(_voms_mapping) + 100 } ) }}"
+  when: _voms_mapping.description != 'SW manager' and _voms_mapping.description != "pilot"
+
+# Add SW manager role group
+- name: SW manager role group
+  set_fact:
+    _voms_mapping_new: "{{ _voms_mapping_new | combine( { 
+    'group': _vo_data.account_prefix+_voms_mapping_new.suffix,
+    'gid': _vo_data.base_uid + 1 } ) }}"
+  when: _voms_mapping.description == 'SW manager'
+
+# Add pilot role group
+- name: pilot role group
+  set_fact:
+    _voms_mapping_new: "{{ _voms_mapping_new | combine( {
+    'group': _vo_data.account_prefix+_voms_mapping_new.suffix,
+    'gid': _vo_data.base_uid + 2 } ) }}"
+  when: _voms_mapping.description == "pilot"
+
+# Reset pool accounts list
+- name: Reset pool accounts list
+  set_fact:
+    _role_pool_accounts: []
+
+# Generate role user pool accounts list but for SW manager and pilot
+- name: Role user pool accounts
+  set_fact:
+    _role_pool_accounts: "{{ _role_pool_accounts 
+    + [ { 'account': _vo_data.account_prefix+_voms_mapping.suffix + '%03d' | format(ansible_loop.index),
+    'uid': _vo_data.base_uid + 1000 * (_vo_data.voms_mappings.index(_voms_mapping)+2) + ansible_loop.index } ] }}"
+  loop: '{{ range(1 , gridsite_role_pool_accounts_count + 1)  | list }}'
+  loop_control:
+    extended: true
+  when: _voms_mapping.description != 'SW manager' and _voms_mapping.description != "pilot"
+
+# Add SW manager role account
+- name: Add SW manager roles accounts
+  set_fact:
+    _role_pool_accounts: "{{ _role_pool_accounts + [ { 
+    'account': _vo_data.account_prefix+_voms_mapping.suffix,
+    'uid': _vo_data.base_uid + 1 ,
+    'description': 'SW manager' } ] }}"
+  when: _voms_mapping.description == 'SW manager'
+
+# Add pilot role account
+- name: Add pilot roles accounts
+  set_fact:
+    _role_pool_accounts: "{{ _role_pool_accounts + [ { 
+    'account': _vo_data.account_prefix+_voms_mapping.suffix,
+    'uid': _vo_data.base_uid + 2 ,
+    'description': 'pilot' } ] }}"
+  when: _voms_mapping.description == 'pilot'
+
+# debug print _voms_mapping_new
+#- name: Debug print _voms_mapping_new
+#  debug:
+#    msg: "{{ _voms_mapping_new }}"
+
+# debug print _pool_accounts
+#- name: Debug print _pool_accounts
+#  debug:
+#    msg: "{{ _pool_accounts }}"
+
+
+# Combine role user pool accounts list with _voms_mapping
+- name: Combine role user pool accounts list with _voms_mapping
+  set_fact:
+    _voms_mapping_new: "{{ _voms_mapping_new | combine({ 'pool_accounts': _role_pool_accounts }) }}"
+
+# debug print _voms_mapping_new
+- name: Debug print _voms_mapping_new
+  debug:
+    msg: "{{ _voms_mapping_new }}"
+
+# Put it int a new voms_mapping_list
+- name: Add it to the temporary voms_mapping_list
+  set_fact:
+    _voms_mapping_list_new: "{{ _voms_mapping_list_new  + [_voms_mapping_new] }}"

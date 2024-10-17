@@ -1,0 +1,23 @@
+---
+# Items in loops are hard to mute. Lets first create a new list
+- name: temporary vi data list
+  set_fact:
+    _gridsite_supported_vos_data_list_new: []
+
+
+# Create list of VO groups, subgroups and pool accounts
+- name: Create list of VO groups, subgroups and pool accounts
+  include_tasks: 'tasks/grid_vo_groups.yml'
+  loop: '{{ gridsite_supported_vos_data_list }}'
+  loop_control:
+    loop_var: '_vo_data'
+
+# Rename gridsite_supported_vos_data_list to gridsite_supported_vos_data_list_new
+- name: Rename gridsite_supported_vos_data_list to gridsite_supported_vos_data_list_new
+  set_fact:
+    gridsite_supported_vos_data_list: "{{ _gridsite_supported_vos_data_list_new }}"
+
+# debug print gridsite_supported_vos_data_list
+- name: Debug print gridsite_supported_vos_data_list
+  debug:
+    msg: "{{ gridsite_supported_vos_data_list }}"

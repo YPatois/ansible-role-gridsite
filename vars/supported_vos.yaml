@@ -1,4 +1,4 @@
-supported_vos:
+gridsite_supported_vos:
   - 'alice'
   - 'belle'
   - 'biomed'
@@ -12,7 +12,7 @@ supported_vos:
   - 'vo.grand-est.fr'
   - 'vo.sbg.in2p3.fr'
 
-local_vo_params:
+gridsite_supported_vo_params:
   - name: alice
     account_prefix: ali
     fairshare: 20
@@ -20,7 +20,7 @@ local_vo_params:
     account_prefix: bel
   - name: biomed
     account_prefix: bio
-  - cms:
+  - name: cms
     account_prefix: cms
     fairshare: 80
   - name: dteam

@@ -1,0 +1,76 @@
+---
+# Called from tasks/grid_users_n_groups.yml
+# Add main vo group
+- name: Main VO group
+  set_fact:
+    _vo_data_new: "{{ _vo_data | combine( { 'group': _vo_data.name, 'gid': _vo_data.base_uid } ) }}"
+
+# debug print _vo_data_new
+#- name: Debug print _vo_data_new
+#  debug:
+#    msg: "{{ _vo_data_new }}"
+
+# Reset pool accounts list
+- name: Reset pool accounts list
+  set_fact:
+    _vo_pool_accounts: []
+
+# Generate main VO user pool accounts list
+- name: Main VO user pool accounts
+  set_fact:
+    _vo_pool_accounts: "{{ _vo_pool_accounts + [ { 'account': _vo_data.account_prefix + '%03d' | format(ansible_loop.index),
+    'uid': _vo_data.base_uid + 1000 + ansible_loop.index } ] }}"
+  loop: '{{ range(1 , gridsite_vo_pool_accounts_count+1)  | list }}'
+  loop_control:
+    extended: true
+
+# Combine main VO user pool accounts list with _vo_data
+- name: Combine main VO user pool accounts with _vo_data
+  set_fact:
+    _vo_data_new: "{{ _vo_data_new | combine({ 'pool_accounts': _vo_pool_accounts }) }}"
+
+# debug print _vo_data_new
+- name: Debug print _vo_data_new
+  debug:
+    msg: "{{ _vo_data_new }}"
+
+# Simple test
+#- name: Simple test
+#  set_fact:
+#    simple_dict_list: "{{ [ { 'a': [{ 'aa': 1, 'bb': 2}], 'name': 2 }, { 'a': [3], 'b': 4 } ] }}"
+#    simple dict_list: "{{ [ 
+#    { 'a': [{ 'aa': 1, 'bb': 2' }, { 'aa': 3, 'bb': 4 }],'b': 2 },
+#    { 'a': [{ 'aa': 5, 'bb': 6' }, { 'aa': 7, 'bb': 8 }, 'b': 4 }] }}"
+
+# debug print simple dict_list
+#- name: Debug print simple dict_list
+#  debug:
+#    msg: '{{ simple_dict_list }}'
+
+# Simple iteration test on subelements
+#- name: Simple iteration test on subelements of simple dict_list
+#  debug:
+#    msg: ' {{ item }} '
+#  loop: "{{ simple_dict_list | subelements('a', 'skip_missing=True') }}"
+
+# Temporary voms mapping list
+- name: Temporary voms mapping list
+  set_fact:
+    _voms_mapping_list_new: []
+
+# Iterate over voms_mappings to create subgroups and users
+- name: Create subgroups and users
+  include_tasks: 'tasks/grid_vo_roles.yml'
+  loop: "{{ _vo_data_new.voms_mappings }}"
+  loop_control:
+    loop_var: '_voms_mapping'
+
+# Modify voms_mapping item with _voms_mapping_list_new
+- name: Merge voms_mapping item with _voms_mapping_list_new in _vo_data_new
+  set_fact:
+    _vo_data_new: "{{ _vo_data_new | combine({ 'voms_mappings': _voms_mapping_list_new }) }}"
+
+# Put it int a new gridsite_supported_vos_data_list
+- name: Add it to the temporary gridsite_supported_vos_data_list
+  set_fact:
+    _gridsite_supported_vos_data_list_new: "{{ _gridsite_supported_vos_data_list_new + [ _vo_data_new ] }}"
