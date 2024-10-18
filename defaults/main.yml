@@ -3,6 +3,10 @@
 gridsite_name: 'IPHC'
 gridsite_tld_suffix: 'in2p3.fr'
 gridsite_wn_prefix: 'sbgwn'
+gridsite_wn_range: '[50-53]'
+
+# SITE proxy (CVMFS, etc.)
+gridsite_http_proxy: 'http://sbggridnfs1.in2p3.fr:3128'
 
 # VOMS
 gridsite_grid_security_dir: '/etc/grid-security'
@@ -28,6 +32,15 @@ gridsite_arc_other_session_dirs: []
 # Useful
 gridsite_name_lower: '{{ gridsite_name | lower }}'
 gridsite_list_of_wns: "{{ groups['grid_wn'] }}"
+
+# cvmfs role
+cvmfs_http_proxy: '{{ gridsite_http_proxy }}'
+# FIXME: define cvmfs_repositories from supported_vos.
+# /etc/cvmfs/config.d/cms.cern.ch.local:export CMS_LOCAL_SITE=T2_FR_IPHC
+cvmfs_repositories_data: "{{ [ {
+  'repository': 'cms.cern.ch',
+  'data': 'export CMS_LOCAL_SITE=T2_FR_IPHC'
+  }] }}"
 
 # munge role
 munge_key_password: '{{ gridsite_munge_key_password }}'
