@@ -691,9 +691,9 @@ def get_vo_card_data_fresh(vo_idcards_uri, idcards_format, token,use_pickle):
     for vocard in tree.iter(ID_CARD_ELEM):
         vo_card_data.append(parse_vo_card(vocard))
 
-    if use_pickle:
-        with open("vo_idcards.pkl", "wb") as f:
-            pickle.dump(vo_card_data, f)
+    #if use_pickle:
+    with open("vo_idcards.pkl", "wb") as f:
+        pickle.dump(vo_card_data, f)
     return vo_card_data
 
 
