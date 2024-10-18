@@ -13,22 +13,24 @@
   loop: "{{ gridsite_list_of_wns }}"
 
 # Reset slurm_partitionlist: seems it *must* have a default partition
+# FIXME: "ALL" is all what it can do for partitions, for now.
 - name: Reset slurm_partitionlist
   set_fact:
     slurm_partitionlist: "{{ [ {
     'PartitionName': 'normal',
-    'Nodes': slurm_compute_nodes,
+    'Nodes': 'ALL',
     'Default': 'YES',
     'MaxTime': slurm_max_job_time,
     'State': 'UP',
     'DefaultTime': slurm_job_def_time} ] }}"
 
 # Generation of slurm partitions from supported_vos
+# FIXME: "ALL" is all what it can do for partitions, for now.
 - name: Generate slurm partitions
   set_fact:
     slurm_partitionlist: "{{ slurm_partitionlist + [ {
     'PartitionName': item,
-    'Nodes': slurm_compute_nodes,
+    'Nodes': 'ALL',
     'Default': 'NO',
     'MaxTime': slurm_max_job_time,
     'State': 'UP',
