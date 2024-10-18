@@ -41,3 +41,22 @@ gridsite_supported_vo_params:
   - name: vo.sbg.in2p3.fr
     account_prefix: sbg
     fairshare: 5
+
+# Addendum (FIXME)
+_addendum:
+  - name: cms
+    voms_servers:
+    - name: voms-cms-auth.cern.ch
+      host: voms-cms-auth.cern.ch
+      port: 443
+      admin_port: 443
+      DN: /DC=ch/DC=cern/OU=computers/CN=cms-auth.cern.ch
+      CA_DN: /DC=ch/DC=cern/CN=CERN Grid Certification Authority
+  - name: ops
+    voms_servers:
+    - name: voms-ops-auth.cern.ch
+      host: voms-ops-auth.cern.ch
+      port: 443
+      admin_port: 443
+      DN: /DC=ch/DC=cern/OU=computers/CN=ops-auth.cern.ch
+      CA_DN: /DC=ch/DC=cern/CN=CERN Grid Certification Authority
