@@ -5,3 +5,4 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SCRIPTDIR
 source vault/token.sh
 ./update-vo-config -b ../generated_vars  -t $EGI_TOKEN --use-pickle
+#./update-vo-config -b ../generated_vars  -t $EGI_TOKEN

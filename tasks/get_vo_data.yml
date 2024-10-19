@@ -25,3 +25,12 @@
 - name: Combine with local parameters
   set_fact:
     gridsite_supported_vos_data_list: "{{ _supported_vos_data_list | community.general.lists_mergeby(gridsite_supported_vo_params, 'name') }}"
+
+# FIXME: I don't yet understand how voms-cms-auth.cern.ch is *not* 
+# part of operations-portal.egi.eu API return request, but anyway used!
+
+# Fix CMS VO voms servers list
+- name: Fix CMS VO voms servers list
+  set_fact:
+    gridsite_supported_vos_data_list: "{{ gridsite_supported_vos_data_list | community.general.lists_mergeby(_addendum, 'name',list_merge='append') }}"
+
