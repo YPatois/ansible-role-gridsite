@@ -1,12 +1,12 @@
 ---
 # Main variables
-gridsite_name: 'IPHC'
-gridsite_tld_suffix: 'in2p3.fr'
-gridsite_wn_prefix: 'sbgwn'
-gridsite_wn_range: '[50-53]'
+gridsite_name: 'example'
+gridsite_tld_suffix: 'example.org'
+gridsite_wn_prefix: 'wn'
+gridsite_wn_range: '[1-10]'
 
 # SITE proxy (CVMFS, etc.)
-gridsite_http_proxy: 'http://sbggridnfs1.in2p3.fr:3128'
+gridsite_http_proxy: 'http://proxy.example.org:3128'
 
 # VOMS
 gridsite_grid_security_dir: '/etc/grid-security'
@@ -15,15 +15,15 @@ gridsite_gridmapdir_dir: '{{ gridsite_grid_security_dir }}/gridmapdir'
 gridsite_vomses_dir: '/etc/grid-security/vomses'
 
 # COMPUTE
-gridsite_vo_pool_accounts_count: 10
-gridsite_role_pool_accounts_count: 2
+gridsite_vo_pool_accounts_count: 200
+gridsite_role_pool_accounts_count: 20
 
 gridsite_job_time_max: 3-00:00:00
 gridsite_job_time_default: 2-00:00:00
 
 # For ARC_CE
 # This is the shared session dir from the arc_ce itself.
-gridsite_arc_frontend_session_dir: '/shared/arc/sessiondir1'
+gridsite_arc_frontend_session_dir: '/shared/arc/sessiondir'
 # External session dirs.
 gridsite_arc_other_session_dirs: []
 
