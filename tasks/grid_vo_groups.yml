@@ -5,11 +5,6 @@
   set_fact:
     _vo_data_new: "{{ _vo_data | combine( { 'group': _vo_data.name, 'gid': _vo_data.base_uid } ) }}"
 
-# debug print _vo_data_new
-#- name: Debug print _vo_data_new
-#  debug:
-#    msg: "{{ _vo_data_new }}"
-
 # Reset pool accounts list
 - name: Reset pool accounts list
   set_fact:
@@ -30,30 +25,6 @@
 - name: Combine main VO user pool accounts with _vo_data
   set_fact:
     _vo_data_new: "{{ _vo_data_new | combine({ 'pool_accounts': _vo_pool_accounts }) }}"
-
-# debug print _vo_data_new
-- name: Debug print _vo_data_new
-  debug:
-    msg: "{{ _vo_data_new }}"
-
-# Simple test
-#- name: Simple test
-#  set_fact:
-#    simple_dict_list: "{{ [ { 'a': [{ 'aa': 1, 'bb': 2}], 'name': 2 }, { 'a': [3], 'b': 4 } ] }}"
-#    simple dict_list: "{{ [ 
-#    { 'a': [{ 'aa': 1, 'bb': 2' }, { 'aa': 3, 'bb': 4 }],'b': 2 },
-#    { 'a': [{ 'aa': 5, 'bb': 6' }, { 'aa': 7, 'bb': 8 }, 'b': 4 }] }}"
-
-# debug print simple dict_list
-#- name: Debug print simple dict_list
-#  debug:
-#    msg: '{{ simple_dict_list }}'
-
-# Simple iteration test on subelements
-#- name: Simple iteration test on subelements of simple dict_list
-#  debug:
-#    msg: ' {{ item }} '
-#  loop: "{{ simple_dict_list | subelements('a', 'skip_missing=True') }}"
 
 # Temporary voms mapping list
 - name: Temporary voms mapping list
