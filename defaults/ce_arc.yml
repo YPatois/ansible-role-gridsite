@@ -7,3 +7,9 @@ nfs_exports: [ '/home    {{ gridsite_wn_prefix }}*.{{ gridsite_tld_suffix }}(rw,
 
 # munge_role
 munge_type_of_node: 'front'
+
+# autofs role
+autofs_mounts:
+  - name: "{{ gridsite_local_users_homedir | regex_replace('^\\/', '') }}"
+    path: '{{ gridsite_local_users_homedir }}'
+    source: '{{ gridsite_nfs_local_home_server }}''
