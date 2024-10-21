@@ -16,8 +16,3 @@
 - name: Rename gridsite_supported_vos_data_list to gridsite_supported_vos_data_list_new
   set_fact:
     gridsite_supported_vos_data_list: "{{ _gridsite_supported_vos_data_list_new }}"
-
-# debug print gridsite_supported_vos_data_list
-- name: Debug print gridsite_supported_vos_data_list
-  debug:
-    msg: "{{ gridsite_supported_vos_data_list }}"
