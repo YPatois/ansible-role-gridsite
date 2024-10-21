@@ -63,17 +63,6 @@
     'description': 'pilot' } ] }}"
   when: _voms_mapping.description == 'pilot'
 
-# debug print _voms_mapping_new
-#- name: Debug print _voms_mapping_new
-#  debug:
-#    msg: "{{ _voms_mapping_new }}"
-
-# debug print _pool_accounts
-#- name: Debug print _pool_accounts
-#  debug:
-#    msg: "{{ _pool_accounts }}"
-
-
 # Combine role user pool accounts list with _voms_mapping
 - name: Combine role user pool accounts list with _voms_mapping
   set_fact:
