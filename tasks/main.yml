@@ -1,12 +1,6 @@
 ---
 # tasks file for ansible-role-gridsite
 
-# Get supported VOs variables when needed
-- name: Get supported VOs info
-  include_vars:
-    file: 'vars/supported_vos.yaml'
-  when: "'htc_nodes' in group_names"
-
 # If needed, get all the VO data from EGI API
 - name: Call get VO data task
   include_tasks:

@@ -18,8 +18,10 @@
 # Generate main VO user pool accounts list
 - name: Main VO user pool accounts
   set_fact:
-    _vo_pool_accounts: "{{ _vo_pool_accounts + [ { 'account': _vo_data.account_prefix + '%03d' | format(ansible_loop.index),
-    'uid': _vo_data.base_uid + 1000 + ansible_loop.index } ] }}"
+    _vo_pool_accounts: "{{ _vo_pool_accounts + [ { 
+      'account': _vo_data.account_prefix + '%03d' | format(ansible_loop.index),
+      'comment': 'VO ' + _vo_data.name + 'pool account',
+      'uid': _vo_data.base_uid + 1000 + ansible_loop.index } ] }}"
   loop: '{{ range(1 , gridsite_vo_pool_accounts_count+1)  | list }}'
   loop_control:
     extended: true
