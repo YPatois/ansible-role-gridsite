@@ -12,4 +12,14 @@ munge_type_of_node: 'front'
 autofs_mounts:
   - name: "{{ gridsite_local_users_homedir | regex_replace('^\\/', '') }}"
     path: '{{ gridsite_local_users_homedir }}'
-    source: '{{ gridsite_nfs_local_home_server }}''
+    source: '{{ gridsite_nfs_local_home_server }}'
+
+# CVMFS client needs to be installed as our autofs role won't
+# work without.
+# However, we don't want it to actually do anything.
+cvmfs_repositories: []
+cvmfs_client_conf: {
+  CVMFS_STRICT_MOUNT: 'true'
+}
+cvmfs_cache_size: 1
+cvmfs_http_proxy: ' {{ gridsite_http_proxy }} '
