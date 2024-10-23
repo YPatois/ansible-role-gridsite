@@ -8,4 +8,6 @@ autofs_mounts:
   - name: 'home'
     path: '/home'
     source: "{{ groups['ce_arc'][0] }}"
-    
+
+# CVMFS client
+cvmfs_cache_size: "20000"
