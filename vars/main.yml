@@ -1,0 +1,26 @@
+# Variables created from main grid_site ones
+# Useful
+gridsite_name_lower: '{{ gridsite_name | lower }}'
+gridsite_list_of_wns: "{{ groups['grid_wn'] }}"
+
+# cvmfs role
+cvmfs_http_proxy: '{{ gridsite_http_proxy }}'
+# FIXME: define cvmfs_repositories from supported_vos.
+# /etc/cvmfs/config.d/cms.cern.ch.local:export CMS_LOCAL_SITE=T2_FR_IPHC
+cvmfs_repositories_data: "{{ [ {
+  'repository': 'cms.cern.ch',
+  'data': 'export CMS_LOCAL_SITE=T2_FR_IPHC'
+  }] }}"
+
+# munge role
+munge_key_password: '{{ gridsite_munge_key_password }}'
+
+# arc_ce and wn roles:
+arc_frontend_sessiondir: '{{ gridsite_arc_frontend_session_dir }}'
+
+# ansible-role-voms-accounts
+voms_grid_security_dir: '{{ gridsite_grid_security_dir }}'
+voms_vomsdir_dir: '{{ gridsite_vomsdir_dir }}'
+voms_gridmapdir_dir: '{{ gridsite_gridmapdir_dir }}'
+voms_vomses_dir: '{{ gridsite_vomses_dir }}'
+

@@ -1,0 +1,12 @@
+---
+# tasks for grid_wn
+
+- name: Include grid_wn configuration
+  include_vars:
+    file: 'vars/grid_wn.yml'
+  when: "'grid_wn' in group_names"
+
+# Add wn_autofs_mounts items to autofs_mounts
+- name: Add wn_autofs_mounts items to autofs_mounts
+  set_fact:
+    autofs_mounts: "{{ autofs_mounts | union(wn_autofs_mounts) }}"
