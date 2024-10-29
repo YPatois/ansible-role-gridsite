@@ -1,12 +1,15 @@
 ---
 # WNs
 # autofs role
-autofs_mounts:
+wn_autofs_mounts:
   - name: "{{ gridsite_local_users_homedir | regex_replace('^\\/', '') }}"
     path: '{{ gridsite_local_users_homedir }}'
     source: '{{ gridsite_nfs_local_home_server }}'
   - name: 'home'
     path: '/home'
+    source: "{{ groups['ce_arc'][0] }}"
+  - name: '{{ arc_frontend_sessiondir | basename }}'
+    path: '{{ arc_frontend_sessiondir }}'
     source: "{{ groups['ce_arc'][0] }}"
 
 # CVMFS client

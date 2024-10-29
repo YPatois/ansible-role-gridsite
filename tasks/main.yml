@@ -10,7 +10,7 @@
 # If slurm node, include slurm vars
 - name: Include slurm configuration
   include_vars:
-    file: 'defaults/slurm.yml'
+    file: 'vars/slurm.yml'
   when: "'slurm_nodes' in group_names"
 
 # If slurm node, run task to generate needed vars
@@ -25,14 +25,14 @@
     file: 'tasks/grid_users_n_groups.yml'
   when: "'ce_arc' in group_names or 'grid_wn' in group_names"
 
-# If group is grid_wn, include wn vars
-- name: Include grid_wn configuration
-  include_vars:
-    file: 'defaults/grid_wn.yml'
+# If group is grid_wn, include wn tasks
+- name: Include grid_wn tasks
+  include_tasks:
+    file: 'tasks/grid_wn.yml'
   when: "'grid_wn' in group_names"
 
 # If group is ce_arc, include ce_arc vars
 - name: Include ce_arc configuration
   include_vars:
-    file: 'defaults/ce_arc.yml'
+    file: 'vars/ce_arc.yml'
   when: "'ce_arc' in group_names"
