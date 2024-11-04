@@ -26,7 +26,7 @@
 
 # Generation of slurm partitions from supported_vos
 # FIXME: "ALL" is all what it can do for partitions, for now.
-- name: Generate slurm partitions
+- name: Generate slurm partitions list
   set_fact:
     slurm_partitionlist: "{{ slurm_partitionlist + [ {
     'PartitionName': item,
@@ -37,3 +37,13 @@
     'DefaultTime': slurm_job_def_time } ] }}"
   loop: "{{ gridsite_supported_vos }}"
 
+# Add local slurm partitions (FIXME: hardcoded for now)
+- name: Add local slurm partitions
+  set_fact:
+    slurm_partitionlist: "{{ slurm_partitionlist + [ {
+    'PartitionName': 'sbg_local',
+    'Nodes': 'ALL',
+    'Default': 'NO',
+    'MaxTime': slurm_max_job_time,
+    'State': 'UP',
+    'DefaultTime': slurm_job_def_time } ] }}"
