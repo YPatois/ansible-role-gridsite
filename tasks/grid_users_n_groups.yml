@@ -1,6 +1,6 @@
 ---
 # Items in loops are hard to mute. Lets first create a new list
-- name: temporary vi data list
+- name: temporary vo data list
   set_fact:
     _gridsite_supported_vos_data_list_new: []
 
