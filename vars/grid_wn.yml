@@ -13,4 +13,4 @@ wn_autofs_mounts:
     source: "{{ groups['ce_arc'][0] }}"
 
 # CVMFS client
-cvmfs_cache_size: "20000"
+cvmfs_cache_size: "32000"
