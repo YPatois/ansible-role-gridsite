@@ -51,7 +51,7 @@
     _role_pool_accounts: "{{ _role_pool_accounts + [ { 
     'account': _vo_data.account_prefix+_roles_data.suffix,
     'uid': _vo_data.base_uid + 1 ,
-    'description': 'SW manager' } ] }}"
+    'name': 'lcgadmin' } ] }}"
   when: _roles_data.name == 'lcgadmin'
 
 # Add pilot role account
@@ -60,7 +60,7 @@
     _role_pool_accounts: "{{ _role_pool_accounts + [ { 
     'account': _vo_data.account_prefix+_roles_data.suffix,
     'uid': _vo_data.base_uid + 2 ,
-    'description': 'pilot' } ] }}"
+    'name': 'pilot' } ] }}"
   when: _roles_data.name == 'pilot'
 
 # Combine role user pool accounts list with _roles_data
