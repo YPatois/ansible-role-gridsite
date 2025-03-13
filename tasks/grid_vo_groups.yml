@@ -26,22 +26,22 @@
   set_fact:
     _vo_data_new: "{{ _vo_data_new | combine({ 'pool_accounts': _vo_pool_accounts }) }}"
 
-# Temporary voms mapping list
-- name: Temporary voms mapping list
+# Temporary roles list
+- name: Temporary roles list
   set_fact:
-    _voms_mapping_list_new: []
+    _roles_data_list_new: []
 
-# Iterate over voms_mappings to create subgroups and users
+# Iterate over roles to create subgroups and users
 - name: Create subgroups and users
   include_tasks: 'tasks/grid_vo_roles.yml'
-  loop: "{{ _vo_data_new.voms_mappings }}"
+  loop: "{{ _vo_data_new.roles }}"
   loop_control:
-    loop_var: '_voms_mapping'
+    loop_var: '_roles_data'
 
 # Modify voms_mapping item with _voms_mapping_list_new
-- name: Merge voms_mapping item with _voms_mapping_list_new in _vo_data_new
+- name: Merge roles_data item with _roles_list_new in _vo_data_new
   set_fact:
-    _vo_data_new: "{{ _vo_data_new | combine({ 'voms_mappings': _voms_mapping_list_new }) }}"
+    _vo_data_new: "{{ _vo_data_new | combine({ 'roles': _roles_data_list_new }) }}"
 
 # Put it int a new gridsite_supported_vos_data_list
 - name: Add it to the temporary gridsite_supported_vos_data_list
