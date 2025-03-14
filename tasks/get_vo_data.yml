@@ -16,7 +16,7 @@
 # Ensure all VO have a role, even empty:
 - name: Normalize list to ensure every dict has a 'roles' key with a list
   set_fact:
-    gridsite_supported_vos_data_list: "{{ _supported_vos_data_list | map('combine', {'roles': item.get('roles', []) }) | list }}"
+    gridsite_supported_vos_data_list: "{{ gridsite_supported_vos_data_list | default([]) + [ item | combine({ 'roles': [] }, list_merge='append') ] }}"
   loop: "{{ _supported_vos_data_list }}"
   loop_control:
     loop_var: item
