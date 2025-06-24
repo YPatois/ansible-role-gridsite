@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Yannick Patois <yannick.patois@iphc.cnrs.fr>
-  description: A role to supervise a computing grid cluster. For now very tuned toward WLCG/IPHC site.
+  description: A role to supervise a computing grid cluster
   license: Apache 2.0
   min_ansible_version: 2.1
   platforms:
