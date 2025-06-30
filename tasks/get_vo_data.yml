@@ -1,36 +1,22 @@
 ---
-# Dynamic generation of VO data from EGI API
-- name: Generate VO data
-  local_action: command {{ role_path }}/scripts/generates_yaml_vo_data.sh
-  
-# VO data reading, a bit complex with three operations
-# Can likely be simplified.
-- name: Read vo data files in vars
-  include_vars:
-    file: 'generated_vars/vo/params/{{ item }}.yml'
-  loop: "{{ gridsite_supported_vos }}"
-  register: _supported_vos_data
-
-# Next step
-- name: Combine configs into one dict
+- name: Select supported vos params
   set_fact:
-    _supported_vos_data_dict: "{{ dict(_supported_vos_data.results | json_query('[].[item, ansible_facts]')) }}"
+    _supported_vos_data_list: "{{ brut_vo_data | selectattr('name', 'in', gridsite_supported_vos) }}"
 
-# Next step
-- name: Combine configs into one list
+# Combine with vo details
+- name: Combine with vo details
   set_fact:
-    _supported_vos_data_list: "{{ _supported_vos_data_dict | dict2items | map(attribute='value') }}"
+    _supported_vos_data_list: "{{ _supported_vos_data_list | community.general.lists_mergeby(vo_details, 'name') }}"
 
-# Final step: combining with our local data
+# Combining with our local data
 - name: Combine with local parameters
   set_fact:
-    gridsite_supported_vos_data_list: "{{ _supported_vos_data_list | community.general.lists_mergeby(gridsite_supported_vo_params, 'name') }}"
+    _supported_vos_data_list: "{{ _supported_vos_data_list | community.general.lists_mergeby(gridsite_supported_vo_params, 'name') }}"
 
-# FIXME: I don't yet understand how voms-cms-auth.cern.ch is *not* 
-# part of operations-portal.egi.eu API return request, but anyway used!
-
-# Fix CMS VO voms servers list
-- name: Fix CMS VO voms servers list
+# Ensure all VO have a role, even empty:
+- name: Normalize list to ensure every dict has a 'roles' key with a list
   set_fact:
-    gridsite_supported_vos_data_list: "{{ gridsite_supported_vos_data_list | community.general.lists_mergeby(_addendum, 'name',list_merge='append') }}"
-
+    gridsite_supported_vos_data_list: "{{ gridsite_supported_vos_data_list | default([]) + [ item | combine({ 'roles': [] }, list_merge='append') ] }}"
+  loop: "{{ _supported_vos_data_list }}"
+  loop_control:
+    loop_var: item

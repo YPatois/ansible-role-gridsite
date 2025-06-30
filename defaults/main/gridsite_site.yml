@@ -12,7 +12,7 @@ gridsite_http_proxy: 'http://proxy.example.org:3128'
 gridsite_grid_security_dir: '/etc/grid-security'
 gridsite_vomsdir_dir: '{{ gridsite_grid_security_dir }}/vomsdir'
 gridsite_gridmapdir_dir: '{{ gridsite_grid_security_dir }}/gridmapdir'
-gridsite_vomses_dir: '/etc/grid-security/vomses'
+gridsite_vomses_dir: '/etc/vomses'
 
 # COMPUTE
 gridsite_vo_pool_accounts_count: 200
