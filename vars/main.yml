@@ -15,6 +15,9 @@ cvmfs_repositories_data: "{{ [ {
 # munge role
 munge_key_password: '{{ gridsite_munge_key_password }}'
 
+# arc version
+arc_version: '{{ gridsite_arc_version }}'
+
 # arc_ce and wn roles:
 arc_frontend_sessiondir: '{{ gridsite_arc_frontend_session_dir }}'
 
