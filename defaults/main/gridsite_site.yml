@@ -21,6 +21,11 @@ gridsite_role_pool_accounts_count: 20
 gridsite_job_time_max: 3-00:00:00
 gridsite_job_time_default: 2-00:00:00
 
+gridsite_batch_memory_per_slot: '2048'
+gridsite_batch_constraint_ram: 'no'
+gridsite_batch_constraint_swap: 'no'
+gridsite_batch_allowed_swapspace: '10'
+
 # For ARC_CE
 gridsite_arc_version: '6'
 # This is the shared session dir from the arc_ce itself.
