@@ -13,5 +13,7 @@ slurm_cgroup_constrain_swap: '{{ gridsite_batch_constraint_swap }}'
 slurm_cgroup_allowedramspace: '{{ gridsite_batch_allowed_ramspace }}'
 slurm_cgroup_allowedswapspace: '{{ gridsite_batch_allowed_swapspace }}'
 
+slurm_KillWait: "120" # seconds. Default slurm value is way too low (30s)
+
 slurm_ExtraParamsList:
   - DefMemPerCPU="{{ gridsite_batch_memory_per_slot }}"
