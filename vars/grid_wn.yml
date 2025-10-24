@@ -17,3 +17,6 @@ wn_autofs_mounts:
 #A 2nd order fit of their requrements is close to: a=-0.00152, b=1.16995, c=35.19608
 cvmfs_cache_size: '{{ (-0.00152 * ansible_processor_nproc * ansible_processor_nproc
   + 1.16995 * ansible_processor_nproc + 35.19608)/2 | int * 2048 }}'
+
+ # Extra packages
+wn_rpm_site_packages: '{{ gridsite_wn_site_packages }}'
