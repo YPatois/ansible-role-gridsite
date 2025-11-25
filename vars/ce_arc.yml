@@ -3,7 +3,7 @@
 # nfs role:
 # NFS configuration: exporting /home and the shared session dir to WNs
 nfs_exports: [ '/home    {{ gridsite_wn_prefix }}*.{{ gridsite_tld_suffix }}(rw,sync,no_root_squash)' ,
-               '{{ arc_frontend_sessiondir}} {{ gridsite_wn_prefix }}*.{{ gridsite_tld_suffix }}(rw,sync,no_root_squash)']
+               '{{ arc_frontend_sessiondir }} {{ gridsite_wn_prefix }}*.{{ gridsite_tld_suffix }}(rw,sync,no_root_squash)']
 
 # munge_role
 munge_type_of_node: 'front'
