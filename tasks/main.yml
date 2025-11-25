@@ -6,6 +6,7 @@
   include_tasks:
     file: 'tasks/get_vo_data.yml'
   when: "'htc_nodes' in group_names"
+# when: "'htc_nodes' in group_names and not (slurm_only is defined)"
 
 # If slurm node, include slurm vars
 - name: Include slurm configuration
