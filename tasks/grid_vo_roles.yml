@@ -6,28 +6,21 @@
     _roles_data_new: "{{ _roles_data }}"
 
 # Add role group
-- name: Role group, but for SW manager and pilot
+- name: Role group, but for SW manager, production and pilot
   set_fact:
     _roles_data_new: "{{ _roles_data_new | combine( {
     'group': _vo_data.account_prefix+_roles_data_new.suffix,
-    'gid': _vo_data.base_uid + _vo_data.roles.index(_roles_data) + 100 } ) }}"
-  when: _roles_data.name != 'lcgadmin' and _roles_data.name != 'pilot'
+    'gid': _roles_data.base_uid } ) }}"
+  when:
+    - _roles_data.base_uid is defined
 
-# Add SW manager role group
-- name: SW manager role group
+# Add group for single user groups
+- name: Single user groups
   set_fact:
     _roles_data_new: "{{ _roles_data_new | combine( { 
-    'group': _vo_data.account_prefix+_roles_data_new.suffix,
-    'gid': _vo_data.base_uid + 1 } ) }}"
-  when: _roles_data.name == 'lcgadmin'
-
-# Add pilot role group
-- name: pilot role group
-  set_fact:
-    _roles_data_new: "{{ _roles_data_new | combine( { 
-    'group': _vo_data.account_prefix+_roles_data_new.suffix,
-    'gid': _vo_data.base_uid + 2 } ) }}"
-  when: _roles_data.name == 'pilot'
+    'group': _vo_data.name } ) }}"
+  when:
+    - _roles_data.base_uid is not defined
 
 # Reset pool accounts list
 - name: Reset pool accounts list
@@ -37,43 +30,73 @@
 # Generate role user pool accounts list but for SW manager and pilot
 - name: Role user pool accounts
   set_fact:
-    _role_pool_accounts: "{{ _role_pool_accounts 
-    + [ { 'account': _vo_data.account_prefix+_roles_data.suffix + '%03d' | format(ansible_loop.index),
-    'uid': _vo_data.base_uid + 1000 * (_vo_data.roles.index(_roles_data)+2) + ansible_loop.index } ] }}"
+    _role_pool_accounts: "{{ _role_pool_accounts + [ { 
+      'account': _vo_data.account_prefix+_roles_data.suffix + '%03d' | format(ansible_loop.index),
+      'uid': _roles_data.base_uid + ansible_loop.index,
+      'group': _vo_data.account_prefix+_roles_data.suffix,
+      } ] }}"
   loop: '{{ range(1 , gridsite_role_pool_accounts_count + 1)  | list }}'
   loop_control:
     extended: true
-  when: _roles_data.name != 'lcgadmin' and _roles_data.name != 'pilot'
+  when:
+    - _roles_data.base_uid is defined
 
 # Add SW manager role account
-- name: Add SW manager roles accounts
+- name: Add SW manager role account
+  set_fact:
+    _role_pool_accounts: >
+      {{ _role_pool_accounts + [
+        {
+          'account': _vo_data.account_prefix + _roles_data.suffix,
+          'uid': _vo_data.base_uid + 0,
+          'group': _vo_data.name,
+          'name': 'lcgadmin'
+        }
+      ] }}
+  when: _roles_data.name == 'lcgadmin'
+
+# Add production role account
+- name: Add production role account
   set_fact:
     _role_pool_accounts: "{{ _role_pool_accounts + [ { 
     'account': _vo_data.account_prefix+_roles_data.suffix,
     'uid': _vo_data.base_uid + 1 ,
-    'name': 'lcgadmin' } ] }}"
-  when: _roles_data.name == 'lcgadmin'
+    'group': _vo_data.name,
+    'name': 'production' } ] }}"
+  when: _roles_data.name == 'production'
 
 # Add pilot role account
-- name: Add pilot roles accounts
+- name: Add pilot role account
   set_fact:
     _role_pool_accounts: "{{ _role_pool_accounts + [ { 
     'account': _vo_data.account_prefix+_roles_data.suffix,
     'uid': _vo_data.base_uid + 2 ,
+    'group': _vo_data.name,
     'name': 'pilot' } ] }}"
   when: _roles_data.name == 'pilot'
 
+# Add other non pool accounts
+- name: Add other non pool accounts
+  set_fact:
+    _role_pool_accounts: "{{ _role_pool_accounts + [ { 
+    'account': _vo_data.account_prefix+_roles_data.suffix,
+    'uid': _vo_data.base_uid + 3 + _vo_data.roles.index(_roles_data),
+    'group': _vo_data.name,
+    'name': _roles_data.name } ] }}"
+  when:
+    - _roles_data.base_uid is not defined
+    - _roles_data.name == 'lcgadmin' or _roles_data.name == 'production' or _roles_data.name == 'pilot'
 # Combine role user pool accounts list with _roles_data
 - name: Combine role user pool accounts list with _roles_data
   set_fact:
     _roles_data_new: "{{ _roles_data_new | combine({ 'pool_accounts': _role_pool_accounts }) }}"
 
-# debug print _voms_mapping_new
-#- name: Debug print _voms_mapping_new
-#  debug:
-#    msg: "{{ _voms_mapping_new }}"
+# debug print _roles_data_new
+- name: Debug print _roles_data_new
+  debug:
+    msg: "{{ _roles_data_new }}"
 
 # Put it int a new voms_mapping_list
-- name: Add it to the temporary voms_mapping_list
+- name: Add it to the temporary voms_maping_list
   set_fact:
     _roles_data_list_new: "{{ _roles_data_list_new  + [_roles_data_new] }}"
