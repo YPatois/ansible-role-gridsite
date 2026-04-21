@@ -85,7 +85,10 @@
     'name': _roles_data.name } ] }}"
   when:
     - _roles_data.base_uid is not defined
-    - _roles_data.name == 'lcgadmin' or _roles_data.name == 'production' or _roles_data.name == 'pilot'
+    - _roles_data.name != 'lcgadmin'
+    - _roles_data.name != 'production'
+    - _roles_data.name != 'pilot'
+
 # Combine role user pool accounts list with _roles_data
 - name: Combine role user pool accounts list with _roles_data
   set_fact:
