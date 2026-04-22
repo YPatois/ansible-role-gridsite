@@ -10,7 +10,8 @@
   set_fact:
     _roles_data_new: "{{ _roles_data_new | combine( {
     'group': _vo_data.account_prefix+_roles_data_new.suffix,
-    'gid': _roles_data.base_uid } ) }}"
+    'gid': _roles_data.base_uid,
+    'arcgroup': _vo_data.account_prefix+_roles_data_new.suffix } ) }}"
   when:
     - _roles_data.base_uid is defined
 
@@ -18,7 +19,8 @@
 - name: Single user groups
   set_fact:
     _roles_data_new: "{{ _roles_data_new | combine( { 
-    'group': _vo_data.name } ) }}"
+    'group': _vo_data.name,
+    'arcgroup':  _vo_data.account_prefix+_roles_data_new.suffix } ) }}"
   when:
     - _roles_data.base_uid is not defined
 
