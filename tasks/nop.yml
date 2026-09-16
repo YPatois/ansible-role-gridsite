@@ -1,2 +1,20 @@
 ---
 # No op task
+
+# If slurm node, include slurm vars
+- name: Include slurm configuration
+  include_vars:
+    file: 'vars/slurm.yml'
+  when: "'slurm_nodes' in group_names"
+
+# If group is ce_arc, include ce_arc vars
+- name: Include ce_arc configuration
+  include_vars:
+    file: 'vars/ce_arc.yml'
+  when: "'ce_arc' in group_names"
+
+
+# Expose gridsite_name_lower
+- name: Expose gridsite_name_lower
+  set_fact:
+    gridsite_name_lower: '{{ gridsite_name | lower }}'
